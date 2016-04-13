@@ -19,11 +19,13 @@ popd > /dev/null
 
 INSTALL_DIR=$SCRIPTPATH/cron_install
 mkdir -p $INSTALL_DIR
+LOG_DIR=$SCRIPTPATH/data
+mkdir -p $LOG_DIR
 CRONSCRIPT_FILENAME=$INSTALL_DIR/cronscript.bash
 cronscript=$CRONSCRIPT_FILENAME
 cat <<EOF > $cronscript
 export PATH=\$PATH:$SPEEDTEST_CLI_DIR:$PYTHON_DIR
-python $SCRIPTPATH/src/speed_test_logger.py
+python $SCRIPTPATH/src/internet_speed_test_logger.py --log_dir="$LOG_DIR"
 EOF
 chmod u+x $cronscript
 
