@@ -1,4 +1,44 @@
-<html><body><h1>It works!</h1>
-<p>This is the default web page for this server.</p>
-<p>The web server software is running but no content has been added, yet.</p>
-</body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="plotly-2016-04-19.min.js"></script>
+    <title>Speed Test Results</title>
+  </head>
+  <body>
+    <h1>Speed Test Results</h1>
+    <div id="Ping" style="width: 1200px; height: 500px;" >
+    <div id="Download" style="width: 1200px; height: 500px;" >
+    <div id="Upload" style="width: 1200px; height: 500px;" >
+    <script>
+      function makeplot() {
+      Plotly.d3.csv("internet_speed_test_data.csv", function(data){ processData(data) } );
+      };
+      
+      function processData(allRows) {
+        console.log(allRows);
+        var date_times = [], pings = [], downloads = [], uploads = [];
+    
+        for (var i=0; i<allRows.length; i++) {
+          row = allRows[i];
+          date_times.push( row['Date And Time'] );
+          pings.push( row[' Ping (ms)'] );
+          downloads.push( row[' Download (Mbit/s)'] );
+          uploads.push( row[' Upload (Mbit/s)'] );
+        }
+        makePlotly( date_times, pings, "Ping", "Latency (ms)" );
+        makePlotly( date_times, downloads, "Download", "Speed (Mbit/s)" );
+        makePlotly( date_times, uploads, "Upload", "Speed (Mbit/s)" );
+    }
+    
+    function makePlotly( x, y, custom_title, y_axis_name ){
+      var traces = [{
+        x: x, 
+        y: y
+      }];
+      Plotly.newPlot(custom_title, traces, 
+        {title: custom_title, yaxis: {title: y_axis_name}});
+    };
+    makeplot();
+    </script>
+  </body>
+</html>
