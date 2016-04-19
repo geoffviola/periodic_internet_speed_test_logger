@@ -37,3 +37,16 @@ echo "0 * * * * $cronscript" >> $tmp
 crontab < $tmp
 rm -f $tmp
 trap 0
+
+sudo apt-get update
+sudo apt-get install apache2
+if [ -f /var/www/index.html -a ! -L /var/www/index.html ] ; then
+    sudo mv /var/www/index.html /var/www/old_index.html
+fi
+sudo rm -f /var/www/index.html
+sudo ln -s $SCRIPTPATH/index.html /var/www/index.html
+sudo rm -f /var/www/internet_speed_test_data.csv
+sudo ln -s $SCRIPTPATH/data/internet_speed_test_data.csv /var/www/internet_speed_test_data.csv
+sudo rm -f /var/www/plotly-2016-04-19.min.js
+sudo ln -s $SCRIPTPATH/plotly-2016-04-19.min.js /var/www/plotly-2016-04-19.min.js
+
