@@ -4,18 +4,25 @@ import time
 import os.path
 import sys
 import argparse
+import subprocess
+import locale
 
 parser = argparse.ArgumentParser(description='Log internet speed.')
 parser.add_argument('-l', '--log_dir', type=str, help='directory to csv file', default='.')
 args = parser.parse_args()
 log_file_dir = args.log_dir
 
-text = os.popen("speedtest-cli --simple").read()[:-1]
-lines = text.split("\n")
 data = [time.strftime("%c")]
-for line in lines:
-    split_line = line.split(" ")
-    data.append(split_line[1])
+speedtest_process = subprocess.run(["speedtest-cli", "--simple"], stdout=subprocess.PIPE)
+if 0 == speedtest_process.returncode:
+    encoding = locale.getpreferredencoding()
+    text = speedtest_process.stdout[:-1].decode(encoding)
+    lines = text.split("\n")
+    for line in lines:
+        split_line = line.split(" ")
+        data.append(split_line[1])
+else:
+    data += ["-1", "0", "0"]
 
 def write_data(file_handle, data):
     file_handle.write(data[0] + ", " + data[1] + ", " + data[2] + ", " + data[3] + "\n")
