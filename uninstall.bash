@@ -6,7 +6,9 @@ crontab < $tmp
 rm -f $tmp
 trap 0
 
-sudo rm -f /var/www/index.html
+if [ -L /var/www/index.html ] ; then
+    sudo rm -f /var/www/index.html
+fi
 if [ -f /var/www/old_index.html ] ; then
     sudo mv /var/www/old_index.html /var/www/index.html
 fi
