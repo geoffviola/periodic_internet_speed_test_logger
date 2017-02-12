@@ -1,8 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+import sys
+assert sys.version_info >= (3,5)
 
 import time
 import os.path
-import sys
 import argparse
 import subprocess
 import locale
